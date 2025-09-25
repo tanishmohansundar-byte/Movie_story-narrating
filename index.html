@@ -123,7 +123,8 @@
 
   <script>
     let historyStack = ['screen1'];
-    let selectedGenre = ""; // store selected genre
+    let selectedGenre = "";
+    let oneLinerText = "";
 
     function goTo(id){
       document.querySelector('.screen.active').classList.remove('active');
@@ -140,7 +141,7 @@
     function showScreen(id){goTo(id)}
 
     function selectGenre(genre, nextScreen){
-      selectedGenre = genre; // save genre
+      selectedGenre = genre;
       goTo(nextScreen);
     }
 
@@ -152,7 +153,8 @@
     }
 
     function checkOneLiner(){
-      let val=document.getElementById('oneLiner').value.toLowerCase();
+      oneLinerText=document.getElementById('oneLiner').value.trim();
+      let val=oneLinerText.toLowerCase();
       if(val.includes("villain") && val.includes("revenge")){
         goTo('revengeWarn');
       } else {
@@ -177,10 +179,11 @@
     function showConfirmation(name,movie){
       let today=new Date();
       let appoint=new Date();
-      appoint.setDate(today.getDate()+2); // 2 days from confirmation
+      appoint.setDate(today.getDate()+2);
       let data="Name: "+name+
                "\nMovies: "+movie+
                "\nGenre: "+selectedGenre+
+               "\nOne-liner: "+oneLinerText+
                "\nAppointment: "+appoint.toDateString();
       document.getElementById('confirmData').innerText=data;
       goTo('confirmation');
@@ -190,7 +193,8 @@
       document.querySelector('.screen.active').classList.remove('active');
       historyStack=['screen1'];
       document.getElementById('screen1').classList.add('active');
-      selectedGenre=""; // reset genre
+      selectedGenre="";
+      oneLinerText="";
     }
   </script>
 </body>
