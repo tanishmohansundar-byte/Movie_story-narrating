@@ -6,339 +6,201 @@
   <title>Storytelling — Interactive</title>
   <style>
     :root{
-      --bg:#071024;
-      --card:rgba(255,255,255,0.04);
-      --accent1:#ff6b6b;
+      --bg:#0b1020;
+      --card:#141b2d;
+      --accent:#ff6b6b;
       --accent2:#4facfe;
       --accent3:#43e97b;
-      --muted:#c4d0da;
-      --glass:rgba(255,255,255,0.04);
+      --muted:#9aa4b2;
     }
-    *{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#eef;}
-    body{margin:0;min-height:100vh;background:radial-gradient(circle at 10% 20%,#0f1b2d, #071024 35%, #050617 100%);display:flex;align-items:center;justify-content:center;padding:28px}
-    .app{width:100%;max-width:920px;border-radius:16px;padding:22px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 12px 40px rgba(2,6,23,0.7);overflow:hidden}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    h1{margin:0;font-size:1.7rem;background:linear-gradient(90deg,var(--accent1),var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;transition:all 0.3s ease}
+    body{
+      margin:0;min-height:100vh;
+      background:linear-gradient(135deg,#1a2a6c,#b21f1f,#fdbb2d);
+      background-size:400% 400%;
+      animation:gradientShift 15s ease infinite;
+      color:#e6eef6;display:flex;align-items:center;justify-content:center;padding:24px;
+    }
+    @keyframes gradientShift {
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+    .app{
+      width:100%;max-width:840px;
+      background:rgba(0,0,0,0.5);
+      border-radius:16px;
+      padding:24px;
+      box-shadow:0 10px 40px rgba(0,0,0,0.5);
+      animation:popIn 0.6s ease;
+    }
+    @keyframes popIn{0%{transform:scale(0.9);opacity:0;}100%{transform:scale(1);opacity:1;}}
+    h1{margin:0;font-size:2rem;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:glow 3s infinite alternate;}
+    @keyframes glow{0%{text-shadow:0 0 10px #ff6b6b;}100%{text-shadow:0 0 20px #43e97b;}}
     p.lead{margin:6px 0 18px;color:var(--muted)}
-
-    .screen{display:none;padding:18px;animation:cardIn .35s ease both}
+    .screen{display:none;padding:12px;animation:fadeIn 0.5s ease}
     .screen.active{display:block}
-    @keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-    .row{display:flex;gap:12px;flex-wrap:wrap}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-top:12px}
-
-    .btn{padding:10px 14px;border-radius:12px;border:none;cursor:pointer;font-weight:700;background:linear-gradient(135deg,var(--accent2),var(--accent3));color:#022;box-shadow:0 6px 18px rgba(50,50,60,0.25)}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-    .btn.warn{background:linear-gradient(90deg,#ffb86b,#ff6b6b);color:#120600}
-
-    input[type=text], textarea{width:100%;padding:10px;border-radius:10px;border:none;background:rgba(255,255,255,0.03);color:inherit}
-    label{display:block;margin-top:8px;font-size:0.95rem;color:var(--muted)}
-    .muted{color:var(--muted);font-size:0.9rem}
-
-    .message{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.02);margin-top:12px}
-    .error{color:#ffd2d2;background:rgba(255,10,10,0.04);border:1px solid rgba(255,10,10,0.06);padding:10px;border-radius:8px}
-
-    footer{margin-top:14px;color:var(--muted);font-size:0.85rem;text-align:center}
-
-    /* small playful animations */
-    .pulse{animation:pulse 2.2s infinite}
-    @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
-
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+    .btn{
+      display:inline-block;
+      padding:12px 18px;
+      border-radius:12px;
+      background:linear-gradient(135deg,var(--accent2),var(--accent3));
+      border:none;
+      cursor:pointer;
+      margin:8px;
+      font-weight:600;
+      color:#fff;
+      position:relative;
+      overflow:hidden;
+    }
+    .btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 6px 16px rgba(0,0,0,0.3)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin:10px 0}
+    input[type=text], textarea{
+      width:100%;padding:12px;border-radius:10px;border:none;
+      background:rgba(255,255,255,0.1);color:#fff;font-size:1rem;
+    }
+    input:focus, textarea:focus{outline:2px solid var(--accent2);}
+    .note{margin-top:10px;color:#ffd6d6;background:rgba(255, 214, 214,0.08);padding:10px;border-radius:8px;border:1px solid rgba(255,214,214,0.1)}
+    .center{text-align:center}
+    .big-message{
+      margin:20px auto;
+      padding:20px;
+      background:rgba(255,255,255,0.08);
+      border:2px solid var(--accent);
+      border-radius:16px;
+      font-size:1.5rem;
+      font-weight:700;
+      color:#fff;
+      text-align:center;
+      box-shadow:0 0 20px rgba(255,107,107,0.5);
+    }
+    footer{margin-top:16px;color:var(--muted);font-size:0.9rem;text-align:center}
   </style>
 </head>
 <body>
-  <div class="app">
-    <header>
-      <div>
-        <h1>Welcome to Storytelling</h1>
-        <div class="lead muted">Tell a story to <strong>Tanish</strong> — playful interactive flow</div>
-      </div>
-      <div class="muted">Fun, reactive, and a little sassy ✨</div>
+  <div class="app" role="application">
+    <header class="center">
+      <h1>Welcome to Storytelling</h1>
+      <p class="lead">An experimental fun interactive site — tell a story to <strong>Tanish</strong></p>
     </header>
 
-    <!-- Screen 1 -->
-    <section id="screen-welcome" class="screen active">
-      <p class="muted">If you want to say a story to <strong>Tanish</strong>, click proceed.</p>
-      <div class="row" style="margin-top:12px">
-        <button class="btn pulse" onclick="showGenres()">Proceed</button>
-        <button class="btn ghost" onclick="resetAll()">Reset</button>
-      </div>
+    <!-- Screen 1: Welcome -->
+    <section id="screen1" class="screen active center">
+      <p>Here you can share your creative stories in a playful way!</p>
+      <button class="btn" onclick="goTo('screen2')">Proceed</button>
     </section>
 
     <!-- Screen 2: Genres -->
-    <section id="screen-genres" class="screen">
-      <h3>Choose a genre</h3>
-      <div class="grid" id="genreGrid">
-        <!-- genres will be injected -->
-      </div>
-      <div style="margin-top:12px"><button class="btn ghost" onclick="go('screen-welcome')">Back</button></div>
-    </section>
-
-    <!-- Romance block (blocked) -->
-    <section id="screen-romance" class="screen center">
-      <div class="message"><strong>Poda naayi</strong> — Romance is blocked here. 😂</div>
-      <div style="margin-top:12px"><button class="btn" onclick="go('screen-genres')">Choose another genre</button></div>
-    </section>
-
-    <!-- Sci-fi confirmation -->
-    <section id="screen-scifi-ok" class="screen">
-      <div class="message"><strong>u r selected!</strong> — Welcome to Sci‑Fi lane.</div>
-      <div style="margin-top:12px"><button class="btn" onclick="proceedAfterGenre()">Continue</button></div>
-    </section>
-
-    <!-- Action subchoices -->
-    <section id="screen-action" class="screen">
-      <h3>Action — pick type</h3>
-      <div class="row">
-        <button class="btn" onclick="setActionType('spy')">Spy?</button>
-        <button class="btn" onclick="setActionType('new')">New?</button>
-      </div>
-      <div style="margin-top:12px"><button class="btn ghost" onclick="go('screen-genres')">Back</button></div>
-    </section>
-
-    <!-- Feel good ask name -->
-    <section id="screen-feelgood" class="screen">
-      <h3>Feel Good — what's your name?</h3>
-      <label>Name <input id="fg-name" type="text" placeholder="Enter your name"/></label>
-      <div style="margin-top:12px">
-        <button class="btn" onclick="submitFeelGood()">Continue</button>
-        <button class="btn ghost" onclick="go('screen-genres')">Back</button>
-      </div>
-      <div id="fg-msg" class="muted" style="margin-top:8px"></div>
-    </section>
-
-    <!-- Generic continue screen for thriller/crime/horror -->
-    <section id="screen-continue" class="screen">
-      <div class="message">Continue flow for this genre.</div>
-      <div style="margin-top:12px">
-        <button class="btn" onclick="proceedAfterGenre()">Next</button>
+    <section id="screen2" class="screen center">
+      <p>Choose your genre:</p>
+      <div class="grid">
+        <button class="btn" onclick="chooseGenre('action')">Action</button>
+        <button class="btn" onclick="chooseGenre('romance')">Romance</button>
+        <button class="btn" onclick="chooseGenre('sci')">Sci Fi</button>
+        <button class="btn" onclick="chooseGenre('feel')">Feel Good</button>
+        <button class="btn" onclick="chooseGenre('thriller')">Thriller</button>
+        <button class="btn" onclick="chooseGenre('crime')">Crime</button>
+        <button class="btn" onclick="chooseGenre('horror')">Horror</button>
+        <button class="btn" onclick="chooseGenre('shramana')">Shramana</button>
       </div>
     </section>
 
-    <!-- One-liner page (for all except horror) -->
-    <section id="screen-oneliner" class="screen">
-      <h3>Write a one-liner (max 100 characters)</h3>
-      <label>One-liner<textarea id="one-liner" maxlength="100" rows="3" placeholder="A single line pitch... (100 chars max)"></textarea></label>
-      <div class="muted" id="ol-count">0 / 100</div>
-      <div style="margin-top:12px">
-        <button class="btn" onclick="submitOneLiner()">Next</button>
-        <button class="btn ghost" onclick="go('screen-genres')">Cancel</button>
-      </div>
-      <div class="muted" style="margin-top:10px">Note: violent or harmful content is not allowed — such submissions will be rejected.</div>
+    <!-- Special message screen -->
+    <section id="specialScreen" class="screen center">
+      <div id="specialMessage" class="big-message"></div>
+      <button class="btn" onclick="goTo('screen2')">Back</button>
     </section>
 
-    <!-- Details page: name and previous movies -->
-    <section id="screen-details" class="screen">
-      <h3>Your details</h3>
-      <label>Your name <input id="detail-name" type="text" placeholder="e.g., Tanish"/></label>
-      <label>Previous movies (comma separated) <input id="detail-movies" type="text" placeholder="Movie1, Movie2"/></label>
-      <div style="margin-top:12px">
-        <button class="btn" onclick="submitDetails()">Submit</button>
-        <button class="btn ghost" onclick="go('screen-genres')">Back</button>
-      </div>
-      <div id="detail-msg" class="message" style="margin-top:12px;display:none"></div>
+    <!-- One-liner screen -->
+    <section id="oneLinerScreen" class="screen">
+      <p>Give us a one-liner for your story (max 100 characters):</p>
+      <textarea id="oneLiner" maxlength="100"></textarea>
+      <button class="btn" onclick="checkOneLiner()">Next</button>
     </section>
 
-    <!-- Custom name responses screen (intermediate) -->
-    <section id="screen-name-response" class="screen">
-      <div id="name-response" class="message"></div>
-      <div style="margin-top:12px">
-        <button class="btn" onclick="showConfirmation()">Continue</button>
-      </div>
+    <!-- Details screen -->
+    <section id="detailsScreen" class="screen">
+      <p>Enter your details:</p>
+      <input type="text" id="userName" placeholder="Your name" />
+      <input type="text" id="userMovies" placeholder="Your previous movies" />
+      <button class="btn" onclick="checkDetails()">Submit</button>
     </section>
 
     <!-- Confirmation screen -->
-    <section id="screen-confirm" class="screen">
-      <h3>Confirm your booking</h3>
-      <div id="confirm-details" class="message"></div>
-      <div style="margin-top:12px">
-        <button class="btn" onclick="finalize()">Book appointment</button>
-        <button class="btn ghost" onclick="go('screen-genres')">Edit</button>
-      </div>
+    <section id="confirmScreen" class="screen">
+      <h2>Confirmation</h2>
+      <p id="confirmDetails"></p>
+      <footer id="appointment"></footer>
     </section>
-
-    <!-- Final booked screen -->
-    <section id="screen-booked" class="screen">
-      <h3>Booked!</h3>
-      <div id="booked-msg" class="message"></div>
-      <div style="margin-top:12px"><button class="btn" onclick="resetAll()">Make another</button></div>
-    </section>
-
-    <footer>Made with playful checks — some names trigger cheeky responses.</footer>
   </div>
 
   <script>
-    // ----- state -----
-    const state = {
-      genre: null,
-      actionType: null,
-      oneLiner: null,
-      name: null,
-      movies: null,
-      appointmentDate: null
-    };
+    let selectedGenre = '';
 
-    const genres = ['action','romance','sci fi','feel good','thriller','crime','horror','shramana'];
-
-    function go(id){
+    function goTo(id){
       document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
     }
 
-    function showGenres(){
-      // populate genre grid
-      const grid = document.getElementById('genreGrid');
-      grid.innerHTML = '';
-      genres.forEach(g=>{
-        const btn = document.createElement('button');
-        btn.className = 'btn';
-        btn.textContent = g.toUpperCase();
-        btn.onclick = ()=>selectGenre(g);
-        grid.appendChild(btn);
-      });
-      go('screen-genres');
-    }
-
-    function selectGenre(g){
-      state.genre = g;
-      // Branching rules per user's description
-      if(g === 'romance'){
-        go('screen-romance');
-        return;
-      }
-      if(g === 'sci fi' || g === 'sci-fi' || g === 'scifi'){
-        go('screen-scifi-ok');
-        return;
-      }
-      if(g === 'action'){
-        go('screen-action');
-        return;
-      }
-      if(g === 'feel good'){
-        go('screen-feelgood');
-        return;
-      }
-      // thriller, crime -> continue
-      if(g === 'thriller' || g === 'crime' || g === 'shramana'){
-        go('screen-continue');
-        return;
-      }
-      // horror: based on interpretation we will go directly to details (skip one-liner)
-      if(g === 'horror'){
-        // skip one-liner and go to details
-        go('screen-details');
-        return;
-      }
-      // default
-      go('screen-genres');
-    }
-
-    function setActionType(t){ state.actionType = t; proceedAfterGenre(); }
-
-    function submitFeelGood(){
-      const name = document.getElementById('fg-name').value.trim().toLowerCase();
-      if(!name){ document.getElementById('fg-msg').textContent = 'Please enter a name.'; return; }
-      if(name === 'sorus'){
-        document.getElementById('fg-msg').textContent = 'Rejected — no Sorus allowed here.'; return;
-      }
-      state.name = document.getElementById('fg-name').value.trim();
-      proceedAfterGenre();
-    }
-
-    function proceedAfterGenre(){
-      // For all genres EXCEPT horror, ask one-liner
-      if(state.genre === 'horror'){
-        go('screen-details');
+    function chooseGenre(g){
+      selectedGenre = g;
+      if(g==='romance'){
+        document.getElementById('specialMessage').innerText = 'Poda naayi';
+        goTo('specialScreen');
+      } else if(g==='sci'){
+        document.getElementById('specialMessage').innerText = 'u r selected!';
+        goTo('specialScreen');
+      } else if(g==='feel'){
+        let name = prompt('Enter your name:');
+        if(name && name.toLowerCase()==='sorus'){
+          document.getElementById('specialMessage').innerText = 'Rejected, sorus!';
+          goTo('specialScreen');
+        } else {
+          goTo('oneLinerScreen');
+        }
+      } else if(g==='horror'){
+        goTo('detailsScreen');
       } else {
-        go('screen-oneliner');
-        updateOneLinerCount();
+        goTo('oneLinerScreen');
       }
     }
 
-    // one-liner handling
-    function updateOneLinerCount(){
-      const ol = document.getElementById('one-liner');
-      const count = ol.value.length;
-      document.getElementById('ol-count').textContent = `${count} / 100`;
-    }
-    document.addEventListener('input', e=>{ if(e.target && e.target.id === 'one-liner') updateOneLinerCount(); });
-
-    function submitOneLiner(){
-      const text = document.getElementById('one-liner').value.trim();
-      if(!text){ alert('Please write a one-liner (100 chars max).'); return; }
-      // simple content check for violent/revenge phrase (user mentioned). We'll reject violent themes.
-      const badPhrases = ['revenge by villain\'s brother','revenge','kill','murder','assassinat'];
-      const low = text.toLowerCase();
-      for(const p of badPhrases){ if(low.includes(p)){
-        alert('Violent or revenge themes are not allowed here. Please submit a different one-liner.');
+    function checkOneLiner(){
+      let text = document.getElementById('oneLiner').value.toLowerCase();
+      if(text.includes("villain's brother taking revenge")){
+        document.getElementById('specialMessage').innerText = "if the story is about villain's brother taking revenge ill kill u";
+        goTo('specialScreen');
         return;
-      }}
-      state.oneLiner = text;
-      go('screen-details');
-    }
-
-    function submitDetails(){
-      const nameRaw = document.getElementById('detail-name').value.trim();
-      const moviesRaw = document.getElementById('detail-movies').value.trim();
-      if(!nameRaw){ alert('Please enter a name.'); return; }
-      state.name = nameRaw;
-      state.movies = moviesRaw;
-      // special name responses
-      const nameLower = nameRaw.toLowerCase();
-      let resp = '';
-      if(nameLower === 'kute') resp = 'ohh shoresh fans';
-      else if(nameLower === 'ga') resp = 'olle';
-      else if(nameLower === 'sorus') resp = 'Magadi!!';
-      else if(nameLower === 'dev darshan' || nameLower === 'devdarshan') resp = 'kovam pola !!';
-      else if(nameLower === 'senapathy') resp = 'varmam potruva pathyy!!';
-      else if(nameLower === 'za') resp = 'soodu!!';
-      else if(nameLower === 'allae') resp = 'rip galla and shramana and bute story';
-      
-      if(resp){
-        document.getElementById('name-response').textContent = resp;
-        go('screen-name-response');
-      } else {
-        showConfirmation();
       }
+      goTo('detailsScreen');
     }
 
-    function showConfirmation(){
-      // build details summary
-      const details = [];
-      details.push(`Genre: ${state.genre || '—'}`);
-      if(state.actionType) details.push(`Action type: ${state.actionType}`);
-      if(state.oneLiner) details.push(`One-liner: ${state.oneLiner}`);
-      details.push(`Name: ${state.name || '—'}`);
-      if(state.movies) details.push(`Previous movies: ${state.movies}`);
-      document.getElementById('confirm-details').innerHTML = '<pre>' + details.join('\n') + '</pre>';
-      go('screen-confirm');
-    }
+    function checkDetails(){
+      let name = document.getElementById('userName').value.trim().toLowerCase();
+      let movies = document.getElementById('userMovies').value;
+      let message = '';
+      if(name==='kute') message = 'ohh shoresh fans';
+      if(name==='ga') message = 'olle';
+      if(name==='sorus') message = 'Magadi!!';
+      if(name==='dev darshan') message = 'kovam pola !!';
+      if(name==='senapathy') message = 'varmam potruva pathyy!!';
+      if(name==='za') message = 'soodu!!';
+      if(name==='allae') message = 'rip galla and shramana and bute story';
 
-    function finalize(){
-      // appointment 2 days after booking day
-      const today = new Date();
-      const appt = new Date(today);
-      appt.setDate(appt.getDate() + 2);
-      state.appointmentDate = appt.toDateString();
-      // show booked screen with message
-      const msg = document.getElementById('booked-msg');
-      msg.innerHTML = `<strong>Appointment set for:</strong> ${state.appointmentDate}<br><br>`+
-                      `<strong>Summary:</strong><br><pre>Genre: ${state.genre}\nName: ${state.name}\nOne-liner: ${state.oneLiner || '—'}\nPrevious movies: ${state.movies || '—'}</pre>`+
-                      `<div class="muted" style="margin-top:8px">Note: violent/revenge content is rejected. Threatening messages were removed for safety.</div>`;
-      go('screen-booked');
-    }
+      if(message){
+        document.getElementById('specialMessage').innerText = message;
+        goTo('specialScreen');
+        return;
+      }
 
-    function resetAll(){
-      state.genre = null; state.actionType = null; state.oneLiner = null; state.name = null; state.movies = null; state.appointmentDate = null;
-      // clear inputs
-      ['fg-name','one-liner','detail-name','detail-movies'].forEach(id=>{const el=document.getElementById(id); if(el) el.value='';});
-      document.getElementById('fg-msg') && (document.getElementById('fg-msg').textContent='');
-      go('screen-welcome');
+      document.getElementById('confirmDetails').innerText = `Name: ${document.getElementById('userName').value}, Movies: ${movies}, Genre: ${selectedGenre}`;
+      // Appointment 2 days later
+      let today = new Date();
+      today.setDate(today.getDate()+2);
+      document.getElementById('appointment').innerText = 'Your appointment is on: '+today.toDateString();
+      goTo('confirmScreen');
     }
-
-    // initial populate
-    showGenres();
   </script>
 </body>
 </html>
