@@ -1,150 +1,119 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Storytelling — Confirmation Flow</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Storytelling — Interactive</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: white;
-      text-align: center;
-      padding-top: 60px;
-    }
-    .screen {
-      display: none;
-      background: #1e293b;
-      padding: 25px;
-      border-radius: 12px;
-      width: 480px;
-      margin: auto;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-      animation: fadeIn 0.5s ease-in-out;
-    }
-    .screen.active { display: block; }
-    input, select {
-      padding: 10px;
-      width: 80%;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-      text-align: center;
-    }
-    button {
-      padding: 10px 18px;
-      margin: 8px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    button:hover { transform: scale(1.05); }
-    .proceed { background: linear-gradient(90deg,#3b82f6,#10b981); color: white; }
-    .back { background: #ef4444; color: white; }
-    .confirm { background: #22c55e; color: white; }
-    .reset { background: #374151; color: white; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .dataBox {
-      text-align: left;
-      background: #0f172a;
-      padding: 15px;
-      border-radius: 8px;
-      margin: 15px 0;
-      font-size: 1rem;
-    }
+    :root{--bg1:#0a1a40;--bg2:#123c7a;--card:#102a56;--accent:#4ea8ff;--muted:#b0c4de;}
+    *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{margin:0;min-height:100vh;background:linear-gradient(135deg,var(--bg1),var(--bg2));background-size:400% 400%;animation:gradientShift 12s ease infinite;color:#e6eef6;display:flex;align-items:center;justify-content:center;padding:24px}
+    @keyframes gradientShift {0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    .app{width:100%;max-width:840px;background:rgba(255,255,255,0.05);border-radius:14px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.4)}
+    h1{margin:0;font-size:1.6rem}
+    p.lead{margin:8px 0 18px;color:var(--muted)}
+    .screen{display:none;padding:16px}
+    .screen.active{display:block}
+    .btn{display:inline-block;padding:10px 16px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.1);cursor:pointer;margin:6px;font-weight:600;color:#fff;transition:all .3s}
+    .btn.primary{background:var(--accent);color:#001b33;border:none}
+    .btn:hover{transform:scale(1.05);background:rgba(78,168,255,0.2)}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
+    input[type=text], textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.2);color:inherit}
+    .note{margin:14px 0;color:#ffdddd;background:rgba(255, 0, 0,0.1);padding:14px;border-radius:8px;border:1px solid rgba(255,0,0,0.2);font-size:1.2rem;font-weight:bold;text-align:center}
+    .highlight-msg{margin:20px 0;padding:20px;background:rgba(78,168,255,0.15);border:2px solid var(--accent);border-radius:10px;font-size:1.3rem;font-weight:bold;text-align:center}
+    .nav{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap}
+    pre{white-space:pre-wrap;word-wrap:break-word;font-size:1rem}
   </style>
 </head>
 <body>
+  <div class="app" role="application">
+    <!-- Screen 1: Welcome -->
+    <section id="screen1" class="screen active">
+      <h1>Welcome to Storytelling</h1>
+      <p class="lead">Tell your story to <strong>Tanish</strong>.</p>
+      <button class="btn primary" onclick="goTo('screen2')">Proceed</button>
+    </section>
 
-  <!-- Screen 1: Welcome -->
-  <div id="welcome" class="screen active">
-    <h2>🌈 Welcome to <span style="color:#22c55e;">Storytelling</span></h2>
-    <p>Tell your story to <b>Tanish</b> — playful interactive flow</p>
-    <p>If you want to say a story to Tanish, click proceed.</p>
-    <button class="proceed" onclick="goTo('details')">Proceed</button>
-    <button class="reset" onclick="resetFlow()">Reset</button>
-  </div>
+    <!-- Screen 2: Genres -->
+    <section id="screen2" class="screen">
+      <h2>Select a Genre</h2>
+      <div class="grid">
+        <button class="btn" onclick="actionGenre()">Action</button>
+        <button class="btn" onclick="showScreen('romanceBlock')">Romance</button>
+        <button class="btn" onclick="showScreen('sciFiConfirm')">Sci Fi</button>
+        <button class="btn" onclick="showScreen('feelGoodName')">Feel Good</button>
+        <button class="btn" onclick="goTo('screenOneLiner')">Thriller</button>
+        <button class="btn" onclick="goTo('screenOneLiner')">Crime</button>
+        <button class="btn" onclick="goTo('screenDetails')">Horror</button>
+        <button class="btn" onclick="goTo('screenOneLiner')">Shramana</button>
+      </div>
+      <div class="nav"><button class="btn" onclick="goBack()">Back</button></div>
+    </section>
 
-  <!-- Screen 2: Enter details -->
-  <div id="details" class="screen">
-    <h2>Enter Details</h2>
-    <input type="text" id="userName" placeholder="Your Name">
-    <br>
-    <select id="genreSelect">
-      <option value="">-- Select Genre --</option>
-      <option>Action</option>
-      <option>Romance</option>
-      <option>Sci-Fi</option>
-      <option>Feel Good</option>
-      <option>Thriller</option>
-      <option>Crime</option>
-      <option>Horror</option>
-    </select>
-    <br>
-    <button class="proceed" onclick="goToConfirm()">Next</button>
-    <button class="back" onclick="goTo('welcome')">Back</button>
-  </div>
+    <!-- Action Sub-options -->
+    <section id="actionOptions" class="screen">
+      <h2>Action Sub-Genre</h2>
+      <div class="grid">
+        <button class="btn" onclick="goTo('screenOneLiner')">Spy?</button>
+        <button class="btn" onclick="goTo('screenOneLiner')">New?</button>
+      </div>
+      <div class="nav"><button class="btn" onclick="goBack()">Back</button></div>
+    </section>
 
-  <!-- Screen 3: Confirmation -->
-  <div id="confirmation" class="screen">
-    <h2>✅ Confirmation</h2>
-    <div class="dataBox">
-      <p><b>Name:</b> <span id="confirmName"></span></p>
-      <p><b>Genre:</b> <span id="confirmGenre"></span></p>
-      <p><b>Appointment:</b> <span id="confirmDate"></span></p>
-    </div>
-    <p>Please confirm the details before proceeding.</p>
-    <button class="confirm" onclick="finalConfirm()">Confirm & Continue</button>
-    <button class="back" onclick="goTo('details')">Go Back</button>
-  </div>
+    <!-- Romance block -->
+    <section id="romanceBlock" class="screen">
+      <div class="highlight-msg">Poda naayi</div>
+      <div class="nav"><button class="btn" onclick="goBack()">Back</button></div>
+    </section>
 
-  <script>
-    let userData = { name: "", genre: "" };
+    <!-- Sci-Fi confirm -->
+    <section id="sciFiConfirm" class="screen">
+      <div class="highlight-msg">u r selected!</div>
+      <div class="nav"><button class="btn primary" onclick="goTo('screenOneLiner')">Next</button><button class="btn" onclick="goBack()">Back</button></div>
+    </section>
 
-    function goTo(id) {
-      document.querySelector(".screen.active").classList.remove("active");
-      document.getElementById(id).classList.add("active");
-    }
+    <!-- Feel good ask name -->
+    <section id="feelGoodName" class="screen">
+      <h2>Enter your name</h2>
+      <input id="feelName" type="text" placeholder="Your name" />
+      <div class="nav"><button class="btn primary" onclick="feelGoodCheck()">Submit</button><button class="btn" onclick="goBack()">Back</button></div>
+    </section>
 
-    function goToConfirm() {
-      let name = document.getElementById("userName").value.trim();
-      let genre = document.getElementById("genreSelect").value;
+    <!-- Feel good reject -->
+    <section id="feelReject" class="screen">
+      <div class="highlight-msg">Rejected: sorus not allowed</div>
+      <div class="nav"><button class="btn primary" onclick="goTo('screenOneLiner')">Next</button><button class="btn" onclick="goBack()">Back</button></div>
+    </section>
 
-      if (!name || !genre) {
-        alert("⚠️ Please enter name and select a genre.");
-        return;
-      }
+    <!-- One-liner -->
+    <section id="screenOneLiner" class="screen">
+      <h2>Enter a One-liner</h2>
+      <textarea id="oneLiner" maxlength="100" placeholder="Type your story idea..."></textarea>
+      <div class="nav"><button class="btn primary" onclick="checkOneLiner()">Next</button><button class="btn" onclick="goBack()">Back</button></div>
+    </section>
 
-      userData.name = name;
-      userData.genre = genre;
+    <!-- One-liner warning -->
+    <section id="revengeWarn" class="screen">
+      <div class="note">if the story is about villain's brother taking revenge ill kill u</div>
+      <div class="nav"><button class="btn primary" onclick="goTo('screenDetails')">Next</button><button class="btn" onclick="goBack()">Back</button></div>
+    </section>
 
-      // Appointment 2 days later
-      let today = new Date();
-      let appoint = new Date();
-      appoint.setDate(today.getDate() + 2);
+    <!-- Details screen -->
+    <section id="screenDetails" class="screen">
+      <h2>Enter Details</h2>
+      <input id="userName" type="text" placeholder="Your name" />
+      <input id="movies" type="text" placeholder="Previous movies" />
+      <div class="nav"><button class="btn primary" onclick="checkDetails()">Submit</button><button class="btn" onclick="goBack()">Back</button></div>
+    </section>
 
-      document.getElementById("confirmName").textContent = userData.name;
-      document.getElementById("confirmGenre").textContent = userData.genre;
-      document.getElementById("confirmDate").textContent = appoint.toDateString();
+    <!-- Special name messages -->
+    <section id="specialMsg" class="screen">
+      <div id="specialText" class="highlight-msg"></div>
+      <div class="nav"><button class="btn primary" onclick="showConfirmation()">Next</button><button class="btn" onclick="goBack()">Back</button></div>
+    </section>
 
-      goTo("confirmation");
-    }
-
-    function resetFlow() {
-      userData = { name: "", genre: "" };
-      document.getElementById("userName").value = "";
-      document.getElementById("genreSelect").value = "";
-    }
-
-    function finalConfirm() {
-      alert("🎉 Story confirmed for " + userData.name + " (" + userData.genre + ")");
-    }
-  </script>
-
-</body>
-</html>
+    <!-- Confirmation screen -->
+    <section id="confirmation" class="screen">
+      <h2>Confirmation</h2>
+      <pre id="confirmData"></pre>
+      <div class="nav"><button
