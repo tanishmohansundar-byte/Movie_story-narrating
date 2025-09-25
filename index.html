@@ -37,14 +37,14 @@
     <section id="screen2" class="screen">
       <h2>Select a Genre</h2>
       <div class="grid">
-        <button class="btn" onclick="actionGenre()">Action</button>
-        <button class="btn" onclick="showScreen('romanceBlock')">Romance</button>
-        <button class="btn" onclick="showScreen('sciFiConfirm')">Sci Fi</button>
-        <button class="btn" onclick="showScreen('feelGoodName')">Feel Good</button>
-        <button class="btn" onclick="goTo('screenOneLiner')">Thriller</button>
-        <button class="btn" onclick="goTo('screenOneLiner')">Crime</button>
-        <button class="btn" onclick="goTo('screenDetails')">Horror</button>
-        <button class="btn" onclick="goTo('screenOneLiner')">Shramana</button>
+        <button class="btn" onclick="selectGenre('Action', 'actionOptions')">Action</button>
+        <button class="btn" onclick="selectGenre('Romance', 'romanceBlock')">Romance</button>
+        <button class="btn" onclick="selectGenre('Sci Fi', 'sciFiConfirm')">Sci Fi</button>
+        <button class="btn" onclick="selectGenre('Feel Good', 'feelGoodName')">Feel Good</button>
+        <button class="btn" onclick="selectGenre('Thriller', 'screenOneLiner')">Thriller</button>
+        <button class="btn" onclick="selectGenre('Crime', 'screenOneLiner')">Crime</button>
+        <button class="btn" onclick="selectGenre('Horror', 'screenDetails')">Horror</button>
+        <button class="btn" onclick="selectGenre('Shramana', 'screenOneLiner')">Shramana</button>
       </div>
       <div class="nav"><button class="btn" onclick="goBack()">Back</button></div>
     </section>
@@ -119,11 +119,11 @@
         <button class="btn primary" onclick="restart()">Another Story?</button>
       </div>
     </section>
-
   </div>
 
   <script>
     let historyStack = ['screen1'];
+    let selectedGenre = ""; // store selected genre
 
     function goTo(id){
       document.querySelector('.screen.active').classList.remove('active');
@@ -138,6 +138,11 @@
       }
     }
     function showScreen(id){goTo(id)}
+
+    function selectGenre(genre, nextScreen){
+      selectedGenre = genre; // save genre
+      goTo(nextScreen);
+    }
 
     function actionGenre(){goTo('actionOptions')}
 
@@ -156,13 +161,13 @@
     }
 
     function checkDetails(){
-      let name=document.getElementById('userName').value.trim().toLowerCase();
+      let name=document.getElementById('userName').value.trim();
       let movie=document.getElementById('movies').value.trim();
       const specials={
         'kute':'ohh shoresh fans','ga':'olle','sorus':'Magadi!!','dev darshan':'kovam pola !!','senapathy':'varmam potruva pathyy!!','za':'soodu!!','allae':'rip galla and shramana and bute story'
       };
-      if(specials[name]){
-        document.getElementById('specialText').innerText=specials[name];
+      if(specials[name.toLowerCase()]){
+        document.getElementById('specialText').innerText=specials[name.toLowerCase()];
         goTo('specialMsg');
       } else {
         showConfirmation(name,movie);
@@ -172,8 +177,11 @@
     function showConfirmation(name,movie){
       let today=new Date();
       let appoint=new Date();
-      appoint.setDate(today.getDate()+2);
-      let data="Name: "+name+"\nMovies: "+movie+"\nAppointment: "+appoint.toDateString();
+      appoint.setDate(today.getDate()+2); // 2 days from confirmation
+      let data="Name: "+name+
+               "\nMovies: "+movie+
+               "\nGenre: "+selectedGenre+
+               "\nAppointment: "+appoint.toDateString();
       document.getElementById('confirmData').innerText=data;
       goTo('confirmation');
     }
@@ -182,6 +190,7 @@
       document.querySelector('.screen.active').classList.remove('active');
       historyStack=['screen1'];
       document.getElementById('screen1').classList.add('active');
+      selectedGenre=""; // reset genre
     }
   </script>
 </body>
